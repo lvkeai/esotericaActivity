@@ -1,0 +1,35 @@
+
+	/*每个页面公共css */
+	uni-page-body{
+		height:100%;
+	}
+	/*公共样式*/
+	.content {
+			height:100%;
+			display: flex;
+			flex-direction: column;
+			/*align-items: center;
+			justify-content: center; */
+			background: url(./static/background.png) no-repeat left top;
+			background-size:100% 100%;
+			
+		}
+	.personBg{
+		position: relative;
+		height:calc(100% - 100px);
+		margin:0 60rpx 0;
+		background:url(./static/people.png) no-repeat left top;
+		background-size:100% auto;
+		}
+	.p30{
+		padding:30rpx;
+	}
+	.pt30{
+		padding-top:30rpx;
+	}
+	.mt30{
+		margin-top:30rpx;
+	}
+	li{
+		list-style: none;;
+	}
