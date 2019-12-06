@@ -21,7 +21,7 @@
 			<div class="personBg">
 				<image :class="'hand '+handclass" :src="'../../static/hand'+handcoler+'.png'"></image>
 				<div class="booksize" @click="toMyCollection"></div>
-				<p class="onecnMid" @tap="choose">{{chooseTitle}}</p>
+				<p class="onecnMid">{{chooseTitle}}</p>
 				<ul>
 					<li @tap="Toggle(item)" :class="[item.bookclass]" :data-class="item.name" v-for="(item,index) in booklist" :key="index">
 						<img :src="['../../static/'+item.img]"/>
@@ -106,13 +106,15 @@
 					new Image().src = "../../static/scroll/scroll21.png";
 					
 			}, 1000);
-			if(null!=options.esotericaId){
-				this.nowCourseId=options.esotericaId;
-			}
-			
 			this.tick();
+		},
+		onShow(){
+			const value = uni.getStorageSync('storage_key');
+			if(null!=value){
+				console.log("options.esotericaId="+value);
+				this.nowCourseId=value;
+			}
 			this.init();
-
 		},
 		methods: {
 			//初始化，先获得当前启动活动，在获得所有参与活动的秘籍
@@ -124,7 +126,7 @@
 							if(res.S==1){
 								if(res.msg==2){//已经参加活动，去我的收集页面
 									console.log("res.v="+res.V.targetEsotericaId+"-----",res.V);
-									uni.navigateTo({
+									uni.redirectTo({
 										url: "myCollection/myCollection?targetEsotericaId="+res.V.targetEsotericaId+"&&userstate="+res.V.state
 									})
 								}else{
@@ -144,7 +146,7 @@
 			getAllEsotericafun(){
 				getAllEsoterica({}).then(res=>{
 					if(res.S==1){
-						
+						this.booklist=[];
 						var courses={}
 						for(var i=0;i<res.V.length;i++){
 							res.V[i].img=this.imgList[i%3];
@@ -156,12 +158,14 @@
 								}
 							}
 						}
+						this.picker=[];
 						for(var key in courses){
 							var temp={}
 							temp.id=key
 							temp.name=courses[key]
 							this.picker.push(temp)
 						}
+						console.log("this.picker",this.picker);
 						if(this.nowCourseId==''){//默认全部
 							this.booklist=res.V;
 						}else{
@@ -175,7 +179,6 @@
 					}else{
 						alert(res.msg);
 					}
-					
 				})
 			},
 			Toggle(e) {
@@ -251,8 +254,22 @@
 					url: "doExercise/doExercise"
 				})
 			},
-			//选择目标秘籍去我的页面
 			toMyCollection(e){
+				var that = this;
+					uni.showModal({
+						title: '提示',
+						content: '确定选择此秘籍？选择后不可更换',
+						success: function (res) {
+							if (res.confirm) {
+								this.choose(e);
+						} else if (res.cancel) {
+									console.log('用户点击取消');
+						}
+					}
+				})
+			},
+			//选择目标秘籍去我的页面
+			choose(e){
 				//添加秘籍
 				if(this.chooseId==null||this.chooseId==''){
 					alert("请选择其他秘籍，如来神掌不卖！")
@@ -268,9 +285,6 @@
 					}
 				})
 			},
-			choose(e){
-				console.log("教师资格证！！！")
-			}
 		}
 	}
 </script>

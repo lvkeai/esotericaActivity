@@ -71,6 +71,8 @@
 					}
 				})
 			})
+			var url = window.top.document.URL;
+			this.config.text=url;
 		},
 		components: {
 		　　html2canvas,

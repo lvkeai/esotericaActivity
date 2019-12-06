@@ -11,22 +11,7 @@
 			<div class="btns mt30">
 				<ul>
 					<li v-for="(item,index) in answerList" :key="index" @click="toNextTopic(item.nextTopicId,item.esotericaId)"><span>{{index+1}}</span>{{item.content}}</li>
-					<!-- <li>
-						<span>A</span>
-						组建项目经理部
-					</li>
-					<li>
-						<span>B</span>
-						组建项目经理部
-					</li>
-					<li>
-						<span>C</span>
-						组建项目经理部
-					</li>
-					<li>
-						<span>D</span>
-						组建项目经理部
-					</li> -->
+					
 				</ul>
 			</div>
 		</div>
@@ -52,6 +37,10 @@
 						this.nowTopic=this.topicList[0];
 						this.selectAnswerByTopicIdfun(this.nowTopic.id);
 					}
+				}else if(res.S=="1001"){
+					uni.navigateTo({
+						url: "../loginAndRegist"
+					})
 				}
 			})
 		},
@@ -64,9 +53,10 @@
 				})
 			},
 			toNextTopic(topicId,esotericaId){
+				console.log("this.topicList",this.topicList);
 				if(topicId!=0){
 					for(var i=0;i<this.topicList.length;i++){
-						if(topicId==this.topicList[i].nextTopicId){
+						if(topicId==this.topicList[i].id){
 							this.nowTopic=this.topicList[i];
 							this.selectAnswerByTopicIdfun(this.nowTopic.id);
 						}
@@ -75,7 +65,8 @@
 					//返回首页选择相应的证书
 					getEsotericaByTargetId({id:esotericaId}).then(res=>{
 						if(res.S==1){
-							uni.navigateTo({
+							uni.setStorageSync('storage_key', res.V.courseId);
+							uni.redirectTo({
 								url: "../index?esotericaId="+res.V.courseId
 							})
 						}
