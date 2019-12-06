@@ -6,7 +6,7 @@ axios.defaults.withCredentials = true
 
 // 环境的切换
 if (process.env.NODE_ENV == 'development') {
-  axios.defaults.baseURL = 'http://192.168.2.109/'
+  axios.defaults.baseURL = 'http://192.168.2.108/'
 } else if (process.env.NODE_ENV == 'debug') {
   axios.defaults.baseURL = ''
 } else if (process.env.NODE_ENV == 'production') {
